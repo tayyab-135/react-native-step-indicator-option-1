@@ -52,7 +52,7 @@ interface DefaultStepIndicatorStyles {
 }
 
 const defaultStyles: DefaultStepIndicatorStyles = {
-  stepIndicatorSize: 30,
+  stepIndicatorSize: 1,
   currentStepIndicatorSize: 40,
   separatorStrokeWidth: 3,
   separatorStrokeUnfinishedWidth: 0,
@@ -250,10 +250,22 @@ const StepIndicator = ({
       return;
     }
     var labelViews = labels.map((label, index) => {
-      const selectedStepLabelStyle =
-        index === currentPosition
-          ? { color: customStyles.currentStepLabelColor }
-          : { color: customStyles.labelColor };
+      var selectedStepLabelStyle;
+      if(index<currentPosition){
+       selectedStepLabelStyle={ color: customStyles.reviewdLabelColor }
+      }
+      if(index===currentPosition){
+        selectedStepLabelStyle={ color: customStyles.currentLabelColor}
+      }
+      if(index>currentPosition){
+        selectedStepLabelStyle={ color: customStyles.underReviewLabelColor }
+      }
+
+
+      // const selectedStepLabelStyle =
+      //   index === currentPosition
+      //     ? selectedStepLabelStyle
+      //     : { color: customStyles.labelColor };
       return (
         <TouchableWithoutFeedback
           style={styles.stepLabelItem}
@@ -310,11 +322,11 @@ const StepIndicator = ({
         stepStyle = {
           backgroundColor: customStyles.stepIndicatorCurrentColor,
           borderWidth: customStyles.currentStepStrokeWidth,
-          borderColor: customStyles.stepStrokeCurrentColor,
-          height: sizeAnim,
-          width: sizeAnim,
+          borderColor: 'white',
+          height: 20,
+          width: 20,
           borderRadius: borderRadiusAnim,
-          overflow: 'hidden',
+          // overflow: 'hidden',
         };
         indicatorLabelStyle = {
           overflow: 'hidden',
@@ -324,42 +336,6 @@ const StepIndicator = ({
 
         break;
       }
-      case STEP_STATUS.FINISHED: {
-        stepStyle = {
-          backgroundColor: customStyles.stepIndicatorFinishedColor,
-          borderWidth: customStyles.stepStrokeWidth,
-          borderColor: customStyles.stepStrokeFinishedColor,
-          height: staleSizeAnim,
-          width: staleSizeAnim,
-          borderRadius: customStyles.stepIndicatorSize / 2,
-          overflow: 'hidden',
-        };
-        indicatorLabelStyle = {
-          overflow: 'hidden',
-          fontSize: customStyles.stepIndicatorLabelFontSize,
-          color: customStyles.stepIndicatorLabelFinishedColor,
-        };
-        break;
-      }
-
-      case STEP_STATUS.UNFINISHED: {
-        stepStyle = {
-          backgroundColor: customStyles.stepIndicatorUnFinishedColor,
-          borderWidth: customStyles.stepStrokeWidth,
-          borderColor: customStyles.stepStrokeUnFinishedColor,
-          height: staleSizeAnim,
-          width: staleSizeAnim,
-          borderRadius: customStyles.stepIndicatorSize / 2,
-          overflow: 'hidden',
-        };
-        indicatorLabelStyle = {
-          overflow: 'hidden',
-          fontSize: customStyles.stepIndicatorLabelFontSize,
-          color: customStyles.stepIndicatorLabelUnFinishedColor,
-        };
-        break;
-      }
-      default:
     }
 
     return (
@@ -370,7 +346,8 @@ const StepIndicator = ({
             stepStatus: getStepStatus(position),
           })
         ) : (
-          <Text style={indicatorLabelStyle}>{`${position + 1}`}</Text>
+          null
+          // <Text style={indicatorLabelStyle}>{`${position + 1}`}</Text>
         )}
       </Animated.View>
     );
@@ -420,7 +397,7 @@ const StepIndicator = ({
       style={[
         styles.container,
         direction === 'vertical'
-          ? { flexDirection: 'row', flex: 1 }
+          ? { flexDirection: 'row-reverse', flex: 1 }
           : { flexDirection: 'column' },
       ]}
     >
